@@ -82,24 +82,19 @@ public class CustomerService {
         if (user == null) {
             throw new AuthenticationFailedException("AUTH-001", "This contact number has not been registered!");
         } else {
-            //1. Authenticate the user
-            // - Encrypt the password(recieved from the user with the salt)
+
             String encryptedPassword = pcp.encrypt(password, user.getSalt());
             if (user.getPassword().equals(encryptedPassword)) {
-                // User has been authenticated
-                // Create a JWT token for the user
+
                 JwtTokenProvider jwtTokenProvider = new JwtTokenProvider(encryptedPassword);
-                // Store that token in the database using UserAuthTokenEntity
                 CustomerAuthEntity userAuthTokenEntity = new CustomerAuthEntity();
                 userAuthTokenEntity.setUuid(UUID.randomUUID().toString());
                 userAuthTokenEntity.setCustomer(user);
                 ZonedDateTime now = ZonedDateTime.now();
                 ZonedDateTime expiry = now.plusHours(8);
-                // Set up a few things
                 userAuthTokenEntity.setLogin_at(now);
                 userAuthTokenEntity.setExpires_at(expiry);
                 String accessToken = jwtTokenProvider.generateToken(user.getUuid(), now, expiry);
-                // Persist the userAuthToken generated, in the database
                 userAuthTokenEntity.setAccessToken(accessToken);
                 catd.create(userAuthTokenEntity);
                 userDao.updateCustomer(user);
@@ -117,9 +112,6 @@ public class CustomerService {
         if (user == null) {
             throw new AuthorizationFailedException("AUTH-001", "Customer is not Logged in.");
         } else {
-            //1. Authenticate the user
-            // - Encrypt the password(recieved from the user with the salt)
-            //String encryptedPassword = pcp.encrypt(password, user.getSalt());
             ZonedDateTime now = ZonedDateTime.now();
             long difference = user.getExpires_at().compareTo(now);
             if(user.getLogout_at()!=null){
