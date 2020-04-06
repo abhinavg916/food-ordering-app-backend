@@ -39,11 +39,11 @@ public class CategoryService {
     public List<CategoryEntity>getCategoriesByRestaurant(String id){
         return rt.catByResId(id);
     }
-    /*public List<ItemEntity> getItemByCategoryId(String id)throws CategoryNotFoundException{
-
-
-        List<ItemEntity> it=ido.getItemsByCategory(id);
-
-        return it;
-    }*/
+//    public List<ItemEntity> getItemByCategoryId(String id)throws CategoryNotFoundException{
+//
+//
+//        List<ItemEntity> it=ido.getItemsByCategory(id);
+//
+//        return it;
+//    }
 }
